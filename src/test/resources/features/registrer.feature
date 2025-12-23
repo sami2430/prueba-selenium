@@ -1,3 +1,4 @@
+@registro
 Feature: Registro de usuario
 
   Scenario: Registro exitoso de un nuevo usuario

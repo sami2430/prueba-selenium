@@ -14,7 +14,7 @@ public class RegisterUserSteps {
     @Given("el usuario se encuentra en la pantalla de login")
     public void el_usuario_se_encuentra_en_la_pantalla_de_login() {
         loginPage = new LoginPage(DriverManager.getDriver());
-        loginPage.open("http://192.168.80.43:10100");
+        loginPage.open();
     }
 
     @When("abre el formulario de crear nuevo usuario")

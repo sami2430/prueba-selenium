@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
 public class LoginPage {
@@ -11,7 +12,12 @@ public class LoginPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    // Botón CREAR NUEVO USUARIO (texto visible)
+    private static final String URL = "http://192.168.80.43:10100";
+
+    private By emailInput = By.xpath("//input[@type='email']");
+    private By passwordInput = By.xpath("//input[@type='password']");
+    private By loginButton = By.xpath("//button[@type='submit']");
+
     private By createNewUserButton =
             By.xpath("//button[.//text()[contains(.,'Crear Nuevo Usuario')]]");
 
@@ -20,8 +26,15 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void open(String url) {
-        driver.get(url);
+    // 👉 SIN parámetros (esto soluciona tu error)
+    public void open() {
+        driver.get(URL);
+    }
+
+    public void login(String email, String password) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput)).sendKeys(email);
+        driver.findElement(passwordInput).sendKeys(password);
+        driver.findElement(loginButton).click();
     }
 
     public void clickCreateNewUser() {
