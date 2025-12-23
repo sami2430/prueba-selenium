@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,10 +14,10 @@ public class ProfilePage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    // Texto nombre usuario (confirmar que estamos en perfil)
-    private By nameText = By.xpath("//h4");
+    // Titulo del perfil (nombre del usuario)
+    private By nameText = By.xpath("//h1 | //h4");
 
-    // Boton PERFIL en menu lateral
+    // Boton PERFIL del menu lateral
     private By profileMenu =
             By.xpath("//span[normalize-space()='Perfil']");
 
@@ -29,10 +30,11 @@ public class ProfilePage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    // Ir explicitamente a perfil
     public void goToProfile() {
-        wait.until(ExpectedConditions.elementToBeClickable(profileMenu)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(nameText));
+        WebElement perfil = wait.until(
+                ExpectedConditions.presenceOfElementLocated(profileMenu)
+        );
+        perfil.click();
     }
 
     public boolean isProfileVisible() {
@@ -41,14 +43,17 @@ public class ProfilePage {
         ).isDisplayed();
     }
 
-    public void openEditUserModal() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(editUserButton));
+    public void clickEditUserButton() {
+        WebElement button = wait.until(
+                ExpectedConditions.presenceOfElementLocated(editUserButton)
+        );
 
-        // Scroll obligatorio (MUI)
-        ((JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView(true);",
-                        driver.findElement(editUserButton));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView(true);", button
+        );
 
-        wait.until(ExpectedConditions.elementToBeClickable(editUserButton)).click();
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].click();", button
+        );
     }
 }

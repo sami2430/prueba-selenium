@@ -30,12 +30,12 @@ public void el_usuario_se_encuentra_en_la_pantalla_de_perfil() {
     assertTrue(profilePage.isProfileVisible());
 }
 
+
 @When("el usuario abre el formulario de edicion de datos")
 public void el_usuario_abre_el_formulario_de_edicion_de_datos() {
-    profilePage.openEditUserModal();
+    profilePage.clickEditUserButton();
     editUserModal = new EditUserModal(DriverManager.getDriver());
 }
-
 
 
 
