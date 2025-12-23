@@ -26,7 +26,6 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // 👉 SIN parámetros (esto soluciona tu error)
     public void open() {
         driver.get(URL);
     }

@@ -41,7 +41,7 @@ public class LoginSteps {
     @Then("se muestra la pantalla principal")
     public void se_muestra_la_pantalla_principal() {
         System.out.println("Login ejecutado correctamente");
-        DriverManager.quitDriver();
+        //DriverManager.quitDriver();
     
     //El then para poder ver por mas tiempo la pantalla
     /*@Then("se muestra la pantalla principal")

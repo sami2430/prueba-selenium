@@ -33,7 +33,7 @@ public class RegisterUserModal {
     private By repeatPasswordInput =
             By.xpath("//div[@role='dialog']//label[contains(text(),'Repite')]/following::input[1]");
 
-    // BOTÓN CORRECTO
+    // boton correcto
     private By submitButton =
             By.xpath("//div[@role='dialog']//button[.//text()[contains(.,'Registrar')]]");
 
