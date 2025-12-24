@@ -28,7 +28,8 @@ public class EditUserModal {
 
 
     private By successMessage =
-            By.xpath("//div[contains(text(),'modificado exitosamente')]");
+    By.xpath("//div[contains(@class,'MuiAlert-message') and contains(text(),'Datos de usuario')]");
+
 
     public EditUserModal(WebDriver driver) {
         this.driver = driver;

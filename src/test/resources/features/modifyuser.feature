@@ -11,3 +11,9 @@ Feature: Modificacion de informacion de usuario
     And guarda los cambios del perfil
     Then se muestra un mensaje de confirmacion de modificacion exitosa
     And los datos actualizados se reflejan en el perfil del usuario
+
+  Scenario: Modificacion erronea de datos del usuario
+  When el usuario abre el formulario de edicion de datos
+  And modifica los datos del usuario con valores invalidos
+  And guarda los cambios del perfil
+  Then el sistema permite guardar datos invalidos

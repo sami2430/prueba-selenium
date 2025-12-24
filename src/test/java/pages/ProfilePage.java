@@ -56,4 +56,12 @@ public class ProfilePage {
                 "arguments[0].click();", button
         );
     }
+
+    private By changePasswordButton =
+        By.xpath("//button[contains(.,'Cambiar Contrasena')]");
+
+public void clickChangePassword() {
+    wait.until(ExpectedConditions.elementToBeClickable(changePasswordButton)).click();
+}
+
 }

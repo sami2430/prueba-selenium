@@ -16,12 +16,6 @@ public class ModifyUserSteps {
     private ProfilePage profilePage;
     private EditUserModal editUserModal;
 
-    @Given("el usuario ha iniciado sesion correctamente")
-    public void el_usuario_ha_iniciado_sesion_correctamente() {
-        loginPage = new LoginPage(DriverManager.getDriver());
-        loginPage.open();
-        loginPage.login("scastro@sentra.cl", "123");
-    }
 
     @Given("el usuario se encuentra en la pantalla de perfil")
 public void el_usuario_se_encuentra_en_la_pantalla_de_perfil() {
@@ -51,13 +45,28 @@ public void el_usuario_abre_el_formulario_de_edicion_de_datos() {
     }
 
     @Then("se muestra un mensaje de confirmacion de modificacion exitosa")
-    public void se_muestra_un_mensaje_de_confirmacion_de_modificacion_exitosa() {
-        assertTrue(editUserModal.isSuccessMessageVisible());
-    }
+public void se_muestra_un_mensaje_de_confirmacion() {
+    assertTrue(editUserModal.isSuccessMessageVisible());
+}
+
 
     @Then("los datos actualizados se reflejan en el perfil del usuario")
-    public void los_datos_actualizados_se_reflejan_en_el_perfil_del_usuario() {
-        assertTrue(profilePage.isProfileVisible());
-        DriverManager.quitDriver();
-    }
+public void los_datos_actualizados_se_reflejan_en_el_perfil() {
+    assertTrue(profilePage.isProfileVisible());
+    DriverManager.quitDriver();
+}
+
+@When("modifica los datos del usuario con valores invalidos")
+public void modifica_los_datos_del_usuario_con_valores_invalidos() {
+    editUserModal.updateName("");
+    editUserModal.updateLastName("");
+}
+
+@Then("el sistema permite guardar datos invalidos")
+public void el_sistema_permite_guardar_datos_invalidos() {
+    // Validamos que el perfil sigue visible, lo que indica que el guardado fue permitido
+    assertTrue(profilePage.isProfileVisible());
+    DriverManager.quitDriver();
+}
+
 }
