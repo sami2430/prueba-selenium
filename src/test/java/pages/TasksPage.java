@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TasksPage extends BasePage {
@@ -38,6 +39,15 @@ public class TasksPage extends BasePage {
 
     public void clickEndDateHeader() {
         click(endDateHeader);
+    }
+
+    // ---------- Sorting Methods ----------
+    public void sortByTitle() {
+        clickTitleHeader();
+    }
+
+    public void sortByEndDate() {
+        clickEndDateHeader();
     }
 
     // ---------- Get data ----------
@@ -92,5 +102,19 @@ public class TasksPage extends BasePage {
         return driver.findElements(priorityCells)
                 .stream()
                 .allMatch(e -> !e.getText().trim().isEmpty());
+    }
+
+    public boolean isTasksSortedByTitle() {
+        List<String> titles = getTitles();
+        List<String> sortedTitles = new ArrayList<>(titles);
+        Collections.sort(sortedTitles, String.CASE_INSENSITIVE_ORDER);
+        return titles.equals(sortedTitles);
+    }
+
+    public boolean isTasksSortedByDate() {
+        List<String> dates = getEndDates();
+        List<String> sortedDates = new ArrayList<>(dates);
+        Collections.sort(sortedDates);
+        return dates.equals(sortedDates);
     }
 }
