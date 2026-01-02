@@ -6,8 +6,12 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Clase utilitaria para generar datos únicos de prueba
- * Requerimientos: 7.1
+ * Utilidad para generación de datos de prueba únicos.
+ * Evita colisiones entre ejecuciones de pruebas automatizadas.
+ * 
+ * Esta clase solo genera datos y no contiene validaciones ni lógica de test.
+ * Proporciona métodos para crear información realista y única que puede
+ * ser utilizada en pruebas automatizadas sin interferir entre ejecuciones.
  */
 public class TestDataGenerator {
     

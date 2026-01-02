@@ -13,33 +13,35 @@ public class TasksSteps {
     private TasksPage tasksPage;
     private HomePage homePage;
 
+    // =========================
+    // CASO: Acceso y visualización de lista de tareas
+    // =========================
+
     /**
-     * Implements navigation to the task list
-     * Requirements: 8.2
+     * Implementa la navegación a la lista de tareas
+     * Requisitos: 8.2
      */
     @When("el usuario accede a la lista de tareas")
     public void el_usuario_accede_a_la_lista_de_tareas() {
-        // Initialize HomePage and ensure proper navigation
+        // Inicializar HomePage y asegurar navegación adecuada
         homePage = new HomePage(DriverManager.getDriver());
         
-        // CRITICAL: Navigate to Home page since login redirects to /dashboard (blank screen)
+        // CRÍTICO: Navegar a la página Home ya que el login redirige a /dashboard (pantalla en blanco)
         homePage.ensureOnHomePage();
         
-        // Wait a moment for the page to fully load
+        // Esperar un momento para que la página se cargue completamente
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Verify we can access the task list by checking if tasks are visible
-        assertTrue("Should be able to access the task list", homePage.isTaskListNotEmpty() || homePage.getTaskCount() >= 0);
+        // Verificar que podemos acceder a la lista de tareas comprobando si las tareas son visibles
+        assertTrue("Debe poder acceder a la lista de tareas", homePage.isTaskListNotEmpty() || homePage.getTaskCount() >= 0);
         
-        // Initialize TasksPage for subsequent operations
+        // Inicializar TasksPage para operaciones posteriores
         tasksPage = new TasksPage(DriverManager.getDriver());
     }
-
-
 
     @Then("se muestra la lista de tareas")
     public void se_muestra_la_lista_de_tareas() {
@@ -47,12 +49,15 @@ public class TasksSteps {
         assertTrue(tasksPage.hasTasks());
     }
 
+    // =========================
+    // CASO: Validación de estructura de datos de tareas
+    // =========================
+
     @Then("cada tarea tiene titulo fecha creacion fecha vencimiento y prioridad")
     public void cada_tarea_tiene_datos_completos() {
-    assertTrue(tasksPage.allTasksHaveTitle());
-    assertTrue(tasksPage.allTasksHaveCreationDate());
-    assertTrue(tasksPage.allTasksHaveEndDate());
-    assertTrue(tasksPage.allTasksHavePriority());
+        assertTrue(tasksPage.allTasksHaveTitle());
+        assertTrue(tasksPage.allTasksHaveCreationDate());
+        assertTrue(tasksPage.allTasksHaveEndDate());
+        assertTrue(tasksPage.allTasksHavePriority());
     }
-
 }

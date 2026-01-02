@@ -18,9 +18,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Property-Based Test for Date Sorting Functionality
- * Feature: selenium-test-improvements, Property 2: Date Sorting Correctness
- * Validates: Requirements 2.1, 2.2
+ * Prueba Basada en Propiedades para Funcionalidad de Ordenamiento por Fecha
+ * Característica: selenium-test-improvements, Propiedad 2: Corrección de Ordenamiento por Fecha
+ * Valida: Requisitos 2.1, 2.2
  */
 public class DateSortingPropertyTest {
 
@@ -31,17 +31,17 @@ public class DateSortingPropertyTest {
 
     @Before
     public void setUp() {
-        // Use the existing DriverManager to get driver instance
+        // Usar el DriverManager existente para obtener la instancia del driver
         driver = DriverManager.getDriver();
         tasksPage = new TasksPage(driver);
         random = new Random();
-        // Common date format used in the application
+        // Formato de fecha común usado en la aplicación
         dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 
     @After
     public void tearDown() {
-        // Use DriverManager's quit method
+        // Usar el método quit del DriverManager
         DriverManager.quitDriver();
     }
 

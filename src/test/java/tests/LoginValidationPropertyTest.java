@@ -13,9 +13,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Property-Based Test for Login Validation Functionality
- * Feature: selenium-test-improvements, Property 6: Login Success Validation
- * Validates: Requirements 4.1, 4.2, 4.3
+ * Prueba Basada en Propiedades para Funcionalidad de Validación de Login
+ * Característica: selenium-test-improvements, Propiedad 6: Validación de Éxito de Login
+ * Valida: Requisitos 4.1, 4.2, 4.3
  */
 public class LoginValidationPropertyTest {
 
@@ -25,7 +25,7 @@ public class LoginValidationPropertyTest {
 
     @Before
     public void setUp() {
-        // Use the existing DriverManager to get driver instance
+        // Usar el DriverManager existente para obtener la instancia del driver
         driver = DriverManager.getDriver();
         loginPage = new LoginPage(driver);
         random = new Random();
@@ -33,7 +33,7 @@ public class LoginValidationPropertyTest {
 
     @After
     public void tearDown() {
-        // Use DriverManager's quit method
+        // Usar el método quit del DriverManager
         DriverManager.quitDriver();
     }
 

@@ -19,7 +19,7 @@ public class SortTaskSteps {
     private HomePage homePage;
 
     /**
-     * Ensures we're on the correct page before sorting operations
+     * Asegura que estamos en la página correcta antes de las operaciones de ordenamiento
      */
     private void ensureOnTasksPage() {
         if (homePage == null) {
@@ -31,22 +31,14 @@ public class SortTaskSteps {
         }
     }
 
+    // =========================
+    // CASO: Ordenamiento por prioridad
+    // =========================
+
     @When("ordena las tareas por prioridad")
     public void ordena_las_tareas_por_prioridad() {
         ensureOnTasksPage();
         tasksPage.clickPriorityHeader();
-    }
-
-    @When("ordena las tareas por titulo")
-    public void ordena_las_tareas_por_titulo() {
-        ensureOnTasksPage();
-        tasksPage.sortByTitle();
-    }
-
-    @When("ordena las tareas por fecha termino")
-    public void ordena_las_tareas_por_fecha_termino() {
-        ensureOnTasksPage();
-        tasksPage.sortByEndDate();
     }
 
     @Then("las tareas quedan ordenadas por prioridad")
@@ -57,9 +49,29 @@ public class SortTaskSteps {
         assertEquals(expected, actual);
     }
 
+    // =========================
+    // CASO: Ordenamiento por título
+    // =========================
+
+    @When("ordena las tareas por titulo")
+    public void ordena_las_tareas_por_titulo() {
+        ensureOnTasksPage();
+        tasksPage.sortByTitle();
+    }
+
     @Then("las tareas quedan ordenadas alfabeticamente por titulo")
     public void las_tareas_quedan_ordenadas_alfabeticamente_por_titulo() {
         assertTrue("Tasks should be sorted alphabetically by title", tasksPage.isTasksSortedByTitle());
+    }
+
+    // =========================
+    // CASO: Ordenamiento por fecha de término
+    // =========================
+
+    @When("ordena las tareas por fecha termino")
+    public void ordena_las_tareas_por_fecha_termino() {
+        ensureOnTasksPage();
+        tasksPage.sortByEndDate();
     }
 
     @Then("las tareas quedan ordenadas por fecha termino")

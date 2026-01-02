@@ -7,6 +7,10 @@ import utils.DriverManager;
 
 public class CommonSteps {
 
+    // =========================
+    // CASO: Configuración inicial de sesión
+    // =========================
+
     @Given("el usuario ha iniciado sesion correctamente")
     public void usuario_logueado() {
         LoginPage loginPage = new LoginPage(DriverManager.getDriver());
@@ -17,6 +21,10 @@ public class CommonSteps {
         HomePage homePage = new HomePage(DriverManager.getDriver());
         homePage.navigateToHome();
     }
+
+    // =========================
+    // CASO: Navegación a pantalla principal
+    // =========================
 
     @Given("el usuario se encuentra en la pantalla Home")
     public void el_usuario_se_encuentra_en_la_pantalla_home() {

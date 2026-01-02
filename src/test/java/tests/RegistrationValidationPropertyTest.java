@@ -16,9 +16,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Property-Based Test for Registration Validation Functionality
- * Feature: selenium-test-improvements, Property 4: Registration Success Validation
- * Validates: Requirements 3.1, 3.2, 3.3
+ * Prueba Basada en Propiedades para Funcionalidad de Validación de Registro
+ * Característica: selenium-test-improvements, Propiedad 4: Validación de Éxito de Registro
+ * Valida: Requisitos 3.1, 3.2, 3.3
  */
 public class RegistrationValidationPropertyTest {
 
@@ -29,7 +29,7 @@ public class RegistrationValidationPropertyTest {
 
     @Before
     public void setUp() {
-        // Use the existing DriverManager to get driver instance
+        // Usar el DriverManager existente para obtener la instancia del driver
         driver = DriverManager.getDriver();
         loginPage = new LoginPage(driver);
         random = new Random();
@@ -37,7 +37,7 @@ public class RegistrationValidationPropertyTest {
 
     @After
     public void tearDown() {
-        // Use DriverManager's quit method
+        // Usar el método quit del DriverManager
         DriverManager.quitDriver();
     }
 

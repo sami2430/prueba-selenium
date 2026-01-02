@@ -16,6 +16,10 @@ public class RegisterUserSteps {
     private LoginPage loginPage;
     private RegisterUserModal registerUserModal;
 
+    // =========================
+    // CASO: Registro exitoso
+    // =========================
+
     @Given("el usuario se encuentra en la pantalla de login")
     public void el_usuario_se_encuentra_en_la_pantalla_de_login() {
         loginPage = new LoginPage(DriverManager.getDriver());
@@ -49,6 +53,10 @@ public class RegisterUserSteps {
         assertTrue("El registro debe ser exitoso - debe mostrarse mensaje de éxito o redirección", 
                    registerUserModal.isRegistrationSuccessful());
     }
+
+    // =========================
+    // CASO: Registro erróneo - Datos inválidos
+    // =========================
 
     /**
      * Paso para ingresar datos de registro inválidos
@@ -85,32 +93,6 @@ public class RegisterUserSteps {
     }
 
     /**
-     * Valida escenarios de error en el registro
-     * Requerimientos: 3.4
-     */
-    @Then("se muestra un mensaje de error de registro")
-    public void se_muestra_un_mensaje_de_error_de_registro() {
-        assertTrue("Debe mostrarse un mensaje de error de registro", 
-                   registerUserModal.hasRegistrationError());
-    }
-
-    /**
-     * Valida que el registro fue prevenido
-     * Requerimientos: 3.4
-     */
-    @Then("el registro no se completa")
-    public void el_registro_no_se_completa() {
-        // El registro debe fallar - ya sea mensaje de error mostrado o modal aún abierto
-        boolean hasError = registerUserModal.hasRegistrationError();
-        boolean registrationFailed = !registerUserModal.isRegistrationSuccessful();
-        
-        assertTrue("El registro debe ser prevenido cuando se proporcionan datos inválidos", 
-                   hasError || registrationFailed);
-    }
-
-    // ========== NUEVOS STEPS PARA CASOS ADICIONALES ==========
-
-    /**
      * Paso para ingresar contraseñas diferentes
      * Requerimientos: TC002
      */
@@ -125,6 +107,25 @@ public class RegisterUserSteps {
         registerUserModal.fillConfirmPassword("differentPassword456"); // Contraseña diferente
         registerUserModal.submit();
     }
+
+    /**
+     * Paso para registro con formato de email inválido
+     * Requerimientos: TC005
+     */
+    @When("ingresa un email con formato invalido")
+    public void ingresa_un_email_con_formato_invalido() {
+        UserTestData userData = TestDataGenerator.generateUserTestData();
+        
+        registerUserModal.fillName(userData.getFirstName());
+        registerUserModal.fillLastName(userData.getLastName());
+        registerUserModal.fillEmail("email-invalido-sin-arroba-ni-dominio");
+        registerUserModal.fillPassword(userData.getPassword());
+        registerUserModal.submit();
+    }
+
+    // =========================
+    // CASO: Registro erróneo - Campos faltantes
+    // =========================
 
     /**
      * Paso para registro sin nombre
@@ -168,22 +169,33 @@ public class RegisterUserSteps {
         registerUserModal.submit();
     }
 
+    // =========================
+    // VALIDACIONES DE ERROR
+    // =========================
+
     /**
-     * Paso para registro con formato de email inválido
-     * Requerimientos: TC005
+     * Valida escenarios de error en el registro
+     * Requerimientos: 3.4
      */
-    @When("ingresa un email con formato invalido")
-    public void ingresa_un_email_con_formato_invalido() {
-        UserTestData userData = TestDataGenerator.generateUserTestData();
-        
-        registerUserModal.fillName(userData.getFirstName());
-        registerUserModal.fillLastName(userData.getLastName());
-        registerUserModal.fillEmail("email-invalido-sin-arroba-ni-dominio");
-        registerUserModal.fillPassword(userData.getPassword());
-        registerUserModal.submit();
+    @Then("se muestra un mensaje de error de registro")
+    public void se_muestra_un_mensaje_de_error_de_registro() {
+        assertTrue("Debe mostrarse un mensaje de error de registro", 
+                   registerUserModal.hasRegistrationError());
     }
 
-    // ========== VALIDACIONES ESPECIFICAS ==========
+    /**
+     * Valida que el registro fue prevenido
+     * Requerimientos: 3.4
+     */
+    @Then("el registro no se completa")
+    public void el_registro_no_se_completa() {
+        // El registro debe fallar - ya sea mensaje de error mostrado o modal aún abierto
+        boolean hasError = registerUserModal.hasRegistrationError();
+        boolean registrationFailed = !registerUserModal.isRegistrationSuccessful();
+        
+        assertTrue("El registro debe ser prevenido cuando se proporcionan datos inválidos", 
+                   hasError || registrationFailed);
+    }
 
     /**
      * Valida error de contraseñas no coincidentes

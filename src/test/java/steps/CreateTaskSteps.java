@@ -17,13 +17,17 @@ public class CreateTaskSteps {
     private int initialTaskCount;
     private String createdTaskTitle;
 
+    // =========================
+    // CASO: Creación exitosa de tarea
+    // =========================
+
     @When("el usuario abre el formulario de nueva tarea")
     public void abre_formulario_nueva_tarea() {
         homePage = new HomePage(DriverManager.getDriver());
-        // CRITICAL: Ensure we're on Home page before trying to create tasks
+        // CRÍTICO: Asegurar que estamos en la página Home antes de intentar crear tareas
         homePage.ensureOnHomePage();
         
-        // Store initial task count before creating new task
+        // Almacenar el conteo inicial de tareas antes de crear una nueva
         initialTaskCount = homePage.getTaskCount();
         homePage.clickNuevaTarea();
         createTaskModal = new CreateTaskModal(DriverManager.getDriver());
@@ -31,129 +35,133 @@ public class CreateTaskSteps {
 
     @When("ingresa datos validos de la tarea")
     public void ingresa_datos_validos() {
-        // Generate unique task data for each test run
+        // Generar datos únicos de tarea para cada ejecución de prueba
         TaskTestData taskData = TestDataGenerator.generateTaskTestData();
         
         createdTaskTitle = taskData.getTitle();
         createTaskModal.fillTitle(taskData.getTitle());
         createTaskModal.fillDescription(taskData.getDescription());
         createTaskModal.fillPriority(taskData.getPriority());
-        // CRITICAL: Fill the date field that we discovered was missing
+        // CRÍTICO: Llenar el campo de fecha que descubrimos que faltaba
         createTaskModal.fillDateWithDefault();
     }
 
-    @When("guarda la nueva tarea")
+    @When("confirma la creacion de la tarea")
     public void guarda_tarea() {
         createTaskModal.submit();
     }
 
     /**
-     * Complete step implementation for task creation with valid data
-     * Requirements: 5.1
+     * Implementación completa del paso para creación de tarea con datos válidos
+     * Requisitos: 5.1
      */
     @When("el usuario crea una nueva tarea con datos validos")
     public void el_usuario_crea_una_nueva_tarea_con_datos_validos() {
-        // Step 0: CRITICAL - Ensure we're on Home page (not dashboard)
+        // Paso 0: CRÍTICO - Asegurar que estamos en la página Home (no dashboard)
         homePage = new HomePage(DriverManager.getDriver());
         homePage.ensureOnHomePage();
         
-        // Step 1: Store initial task count
+        // Paso 1: Almacenar el conteo inicial de tareas
         initialTaskCount = homePage.getTaskCount();
         
-        // Step 2: Open the task creation modal
+        // Paso 2: Abrir el modal de creación de tarea
         homePage.clickNuevaTarea();
         createTaskModal = new CreateTaskModal(DriverManager.getDriver());
         
-        // Step 3: Generate and fill the form with unique data
+        // Paso 3: Generar y llenar el formulario con datos únicos
         TaskTestData taskData = TestDataGenerator.generateTaskTestData();
         createdTaskTitle = taskData.getTitle();
         
         createTaskModal.fillTitle(taskData.getTitle());
         createTaskModal.fillDescription(taskData.getDescription());
         createTaskModal.fillPriority(taskData.getPriority());
-        // CRITICAL: Fill the date field that we discovered was missing
+        // CRÍTICO: Llenar el campo de fecha que descubrimos que faltaba
         createTaskModal.fillDateWithDefault();
         
-        // Step 4: Submit the form
+        // Paso 4: Enviar el formulario
         createTaskModal.submit();
     }
 
     /**
-     * Enhanced validation for task creation success
-     * Requirements: 5.1, 5.2, 5.3
+     * Validación mejorada para el éxito de creación de tarea
+     * Requisitos: 5.1, 5.2, 5.3
      */
     @Then("la tarea se muestra en la lista de tareas")
     public void valida_tarea_creada() {
-        // Verify modal closed (indicates successful creation)
-        assertTrue("Task creation modal should close after successful creation", 
+        // Verificar que el modal se cerró (indica creación exitosa)
+        assertTrue("El modal de creación de tarea debe cerrarse después de una creación exitosa", 
                    createTaskModal.isTaskCreationSuccessful());
         
-        // Comprehensive validation: task count increased, task appears with correct data
-        assertTrue("Task should be successfully created and appear in the task list with correct data", 
+        // Validación integral: conteo de tareas aumentó, tarea aparece con datos correctos
+        assertTrue("La tarea debe crearse exitosamente y aparecer en la lista de tareas con datos correctos", 
                    homePage.isTaskCreationSuccessful(initialTaskCount, createdTaskTitle));
     }
 
     /**
-     * Enhanced validation for "la tarea se muestra en la lista" step with data persistence verification
-     * Requirements: 5.1, 5.2
+     * Validación mejorada para el paso "la tarea se muestra en la lista" con verificación de persistencia de datos
+     * Requisitos: 5.1, 5.2
      */
     @Then("la tarea se muestra en la lista")
     public void la_tarea_se_muestra_en_la_lista() {
-        // Verify modal closed (indicates successful creation)
-        assertTrue("Task creation modal should close after successful creation", 
+        // Verificar que el modal se cerró (indica creación exitosa)
+        assertTrue("El modal de creación de tarea debe cerrarse después de una creación exitosa", 
                    createTaskModal.isTaskCreationSuccessful());
         
-        // Verify task appears in the list and task count increased
-        assertTrue("Task should appear in the task list", homePage.isTaskListNotEmpty());
+        // Verificar que la tarea aparece en la lista y el conteo de tareas aumentó
+        assertTrue("La tarea debe aparecer en la lista de tareas", homePage.isTaskListNotEmpty());
         
-        // Verify task count increased by one
+        // Verificar que el conteo de tareas aumentó en uno
         int currentCount = homePage.getTaskCount();
-        assertTrue("Task count should increase after successful creation. Expected: > " + initialTaskCount + ", Actual: " + currentCount, 
+        assertTrue("El conteo de tareas debe aumentar después de una creación exitosa. Esperado: > " + initialTaskCount + ", Actual: " + currentCount, 
                    currentCount > initialTaskCount);
         
-        // If we have a specific task title, verify it exists
+        // Si tenemos un título de tarea específico, verificar que existe
         if (createdTaskTitle != null && !createdTaskTitle.isEmpty()) {
-            assertTrue("Created task should be visible in the task list with title: " + createdTaskTitle, 
+            assertTrue("La tarea creada debe ser visible en la lista de tareas con título: " + createdTaskTitle, 
                        homePage.validateLatestTaskData(createdTaskTitle));
         }
     }
 
+    // =========================
+    // CASO: Creación errónea de tarea
+    // =========================
+
     @When("intenta crear una tarea sin titulo")
     public void crear_tarea_sin_titulo() {
-        // Generate realistic description but leave title empty
+        // Generar descripción realista pero dejar título vacío
         TaskTestData taskData = TestDataGenerator.generateTaskTestData();
         
-        createTaskModal.fillTitle(""); // Empty title for negative test
+        createTaskModal.fillTitle(""); // Título vacío para prueba negativa
         createTaskModal.fillDescription(taskData.getDescription());
         createTaskModal.fillPriority(taskData.getPriority());
-        // Still fill the date field for negative test
+        // Aún llenar el campo de fecha para prueba negativa
         createTaskModal.fillDateWithDefault();
         createTaskModal.submit();
     }
 
     /**
-     * Enhanced validation for task creation failure
-     * Requirements: 5.4 (error handling)
+     * Validación mejorada para fallo de creación de tarea
+     * Requisitos: 5.4 (manejo de errores)
      */
     @Then("la tarea no se crea")
     public void valida_tarea_no_creada() {
-        // Verify modal is still visible (creation failed)
-        assertTrue("Modal should remain visible when task creation fails", 
+        // Verificar que el modal sigue visible (creación falló)
+        assertTrue("El modal debe permanecer visible cuando la creación de tarea falla", 
                    createTaskModal.isModalStillVisible());
         
-        // Verify task count did not increase
+        // Verificar que el conteo de tareas no aumentó
         int currentCount = homePage.getTaskCount();
-        assertTrue("Task count should not increase when creation fails. Expected: " + initialTaskCount + ", Actual: " + currentCount, 
+        assertTrue("El conteo de tareas no debe aumentar cuando la creación falla. Esperado: " + initialTaskCount + ", Actual: " + currentCount, 
                    currentCount == initialTaskCount);
     }
 
     /**
-     * Alternative step for task creation failure validation
-     * Requirements: 5.4 (error handling)
+     * Paso alternativo para validación de fallo de creación de tarea
+     * Requisitos: 5.4 (manejo de errores)
      */
     @Then("la tarea no es creada")
     public void la_tarea_no_es_creada() {
-        // Delegate to the existing implementation
+        // Delegar a la implementación existente
         valida_tarea_no_creada();
     }
 }

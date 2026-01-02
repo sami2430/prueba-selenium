@@ -13,6 +13,14 @@ public class ChangePasswordSteps {
 
     private ProfilePage profilePage;
     private ChangePasswordModal changePasswordModal;
+    
+    // Variables para almacenar el estado del cambio de contraseña
+    private String oldPassword = "123456";
+    private String newPassword = "NuevaPassword123";
+
+    // =========================
+    // CASO: Cambio de contraseña exitoso
+    // =========================
 
     @When("el usuario abre el formulario de cambiar contrasena")
     public void open_change_password() {
@@ -27,10 +35,9 @@ public class ChangePasswordSteps {
         changePasswordModal.submit();
     }
 
-    @When("ingresa contrasenas nuevas distintas")
-    public void invalid_password_change() {
-        changePasswordModal.fillPasswords("Nueva123", "Test123", "Otro123");
-        changePasswordModal.submit();
+    @When("ingresa nueva contrasena")
+    public void ingresa_nueva_contrasena() {
+        changePasswordModal.fillPasswords("123456", "NuevaPassword123", "NuevaPassword123");
     }
 
     @Then("se muestra mensaje de contrasena modificada correctamente")
@@ -38,12 +45,30 @@ public class ChangePasswordSteps {
         assertTrue(changePasswordModal.isSuccessVisible());
     }
 
-    @Then("se muestra mensaje de error de contrasena")
-    public void error_message() {
-        assertTrue(changePasswordModal.isErrorVisible());
+    @Given("el usuario ha cambiado su contrasena exitosamente")
+    public void el_usuario_ha_cambiado_su_contrasena_exitosamente() {
+        // Realizar cambio de contraseña
+        profilePage = new ProfilePage(DriverManager.getDriver());
+        profilePage.clickChangePassword();
+        changePasswordModal = new ChangePasswordModal(DriverManager.getDriver());
+        
+        changePasswordModal.fillPasswords(oldPassword, newPassword, newPassword);
+        changePasswordModal.submit();
+        
+        // Verificar éxito
+        assertTrue("El cambio de contraseña debe ser exitoso", 
+                   changePasswordModal.isSuccessVisible());
     }
 
-    // ========== NUEVOS STEPS PARA CASOS ADICIONALES ==========
+    // =========================
+    // CASO: Cambio de contraseña erróneo
+    // =========================
+
+    @When("ingresa contrasenas nuevas distintas")
+    public void invalid_password_change() {
+        changePasswordModal.fillPasswords("Nueva123", "Test123", "Otro123");
+        changePasswordModal.submit();
+    }
 
     @When("deja todos los campos de contrasena vacios")
     public void deja_todos_los_campos_de_contrasena_vacios() {
@@ -54,6 +79,11 @@ public class ChangePasswordSteps {
     @When("intenta guardar el cambio de contrasena")
     public void intenta_guardar_el_cambio_de_contrasena() {
         changePasswordModal.submit();
+    }
+
+    @Then("se muestra mensaje de error de contrasena")
+    public void error_message() {
+        assertTrue(changePasswordModal.isErrorVisible());
     }
 
     @Then("se muestra mensaje de error de campos requeridos")
@@ -68,10 +98,9 @@ public class ChangePasswordSteps {
                    changePasswordModal.isModalStillOpen() || changePasswordModal.isErrorVisible());
     }
 
-    @When("ingresa nueva contrasena")
-    public void ingresa_nueva_contrasena() {
-        changePasswordModal.fillPasswords("123456", "NuevaPassword123", "NuevaPassword123");
-    }
+    // =========================
+    // CASO: Cancelación de cambio de contraseña
+    // =========================
 
     @When("cancela el cambio de contrasena")
     public void cancela_el_cambio_de_contrasena() {
@@ -90,24 +119,9 @@ public class ChangePasswordSteps {
                    profilePage.isProfileVisible());
     }
 
-    // Variables para almacenar el estado del cambio de contraseña
-    private String oldPassword = "123456";
-    private String newPassword = "NuevaPassword123";
-
-    @Given("el usuario ha cambiado su contrasena exitosamente")
-    public void el_usuario_ha_cambiado_su_contrasena_exitosamente() {
-        // Realizar cambio de contraseña
-        profilePage = new ProfilePage(DriverManager.getDriver());
-        profilePage.clickChangePassword();
-        changePasswordModal = new ChangePasswordModal(DriverManager.getDriver());
-        
-        changePasswordModal.fillPasswords(oldPassword, newPassword, newPassword);
-        changePasswordModal.submit();
-        
-        // Verificar éxito
-        assertTrue("El cambio de contraseña debe ser exitoso", 
-                   changePasswordModal.isSuccessVisible());
-    }
+    // =========================
+    // CASO: Validación de contraseña antigua
+    // =========================
 
     @When("cierra sesion")
     public void cierra_sesion() {

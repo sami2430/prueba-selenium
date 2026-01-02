@@ -16,9 +16,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Property-Based Test for Title Sorting Functionality
- * Feature: selenium-test-improvements, Property 1: Title Sorting Correctness
- * Validates: Requirements 1.1, 1.2
+ * Prueba Basada en Propiedades para Funcionalidad de Ordenamiento por Título
+ * Característica: selenium-test-improvements, Propiedad 1: Corrección de Ordenamiento por Título
+ * Valida: Requisitos 1.1, 1.2
  */
 public class TitleSortingPropertyTest {
 
@@ -28,7 +28,7 @@ public class TitleSortingPropertyTest {
 
     @Before
     public void setUp() {
-        // Use the existing DriverManager to get driver instance
+        // Usar el DriverManager existente para obtener la instancia del driver
         driver = DriverManager.getDriver();
         tasksPage = new TasksPage(driver);
         random = new Random();
@@ -36,7 +36,7 @@ public class TitleSortingPropertyTest {
 
     @After
     public void tearDown() {
-        // Use DriverManager's quit method
+        // Usar el método quit del DriverManager
         DriverManager.quitDriver();
     }
 

@@ -11,44 +11,44 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * Property-based tests for TestDataGenerator uniqueness
- * Feature: selenium-test-improvements, Property 10: Test Data Uniqueness
- * **Validates: Requirements 7.1**
+ * Pruebas basadas en propiedades para unicidad de TestDataGenerator
+ * Característica: selenium-test-improvements, Propiedad 10: Unicidad de Datos de Prueba
+ * **Valida: Requisitos 7.1**
  */
 public class DataUniquenessPropertyTest {
 
     private static final int TEST_ITERATIONS = 100;
 
     /**
-     * Property 10: Email Uniqueness
-     * For any set of generated emails, all emails should be unique
-     * **Validates: Requirements 7.1**
+     * Propiedad 10: Unicidad de Email
+     * Para cualquier conjunto de emails generados, todos los emails deben ser únicos
+     * **Valida: Requisitos 7.1**
      */
     @Test
     public void testEmailUniquenessProperty() {
         Set<String> generatedEmails = new HashSet<>();
         
-        // Generate multiple emails and verify uniqueness
+        // Generar múltiples emails y verificar unicidad
         for (int i = 0; i < TEST_ITERATIONS; i++) {
             String email = TestDataGenerator.generateUniqueEmail();
             
-            // Verify email is not null or empty
-            assertNotNull("Generated email should not be null", email);
-            assertFalse("Generated email should not be empty", email.trim().isEmpty());
+            // Verificar que el email no es null o vacío
+            assertNotNull("El email generado no debe ser null", email);
+            assertFalse("El email generado no debe estar vacío", email.trim().isEmpty());
             
-            // Verify email format is valid
-            assertTrue("Generated email should contain @ symbol", email.contains("@"));
-            assertTrue("Generated email should contain domain", email.contains("."));
+            // Verificar que el formato del email es válido
+            assertTrue("El email generado debe contener el símbolo @", email.contains("@"));
+            assertTrue("El email generado debe contener dominio", email.contains("."));
             
-            // Verify uniqueness
-            assertFalse("Generated email should be unique: " + email, 
+            // Verificar unicidad
+            assertFalse("El email generado debe ser único: " + email, 
                        generatedEmails.contains(email));
             
             generatedEmails.add(email);
         }
         
-        // Verify we generated the expected number of unique emails
-        assertEquals("Should generate exactly " + TEST_ITERATIONS + " unique emails", 
+        // Verificar que generamos el número esperado de emails únicos
+        assertEquals("Debe generar exactamente " + TEST_ITERATIONS + " emails únicos", 
                     TEST_ITERATIONS, generatedEmails.size());
     }
 

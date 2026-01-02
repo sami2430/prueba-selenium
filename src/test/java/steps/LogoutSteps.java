@@ -14,6 +14,10 @@ public class LogoutSteps {
     private HomePage homePage;
     private LoginPage loginPage;
 
+    // =========================
+    // CASO: Logout exitoso
+    // =========================
+
     @Given("el usuario esta logueado en el sistema")
     public void el_usuario_esta_logueado_en_el_sistema() {
         // Primero hacer login con credenciales válidas
@@ -50,6 +54,10 @@ public class LogoutSteps {
         assertTrue("La sesión debe cerrarse - debe estar en la página de login", 
                    currentUrl.contains("login") || currentUrl.contains("auth"));
     }
+
+    // =========================
+    // CASO: Validación de protección de páginas
+    // =========================
 
     @When("intenta acceder a una pagina protegida")
     public void intenta_acceder_a_una_pagina_protegida() {

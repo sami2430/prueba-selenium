@@ -14,9 +14,9 @@ import java.util.Random;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Property-Based Test for Task Creation Functionality
- * Feature: selenium-test-improvements, Property 8: Task Creation Success
- * Validates: Requirements 5.1, 5.2, 5.3
+ * Prueba Basada en Propiedades para Funcionalidad de Creación de Tareas
+ * Característica: selenium-test-improvements, Propiedad 8: Éxito de Creación de Tareas
+ * Valida: Requisitos 5.1, 5.2, 5.3
  */
 public class TaskCreationPropertyTest {
 
@@ -28,75 +28,75 @@ public class TaskCreationPropertyTest {
 
     @Before
     public void setUp() {
-        // Use the existing DriverManager to get driver instance
+        // Usar el DriverManager existente para obtener la instancia del driver
         driver = DriverManager.getDriver();
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
         random = new Random();
         
-        // Login before each test
+        // Hacer login antes de cada prueba
         loginPage.open();
         loginPage.login("scastro@sentra.cl", "123");
         
-        // CRITICAL: Navigate to home page after login (app redirects to /dashboard which is blank)
+        // CRÍTICO: Navegar a la página home después del login (la app redirige a /dashboard que está en blanco)
         homePage.ensureOnHomePage();
     }
 
     @After
     public void tearDown() {
-        // Use DriverManager's quit method
+        // Usar el método quit del DriverManager
         DriverManager.quitDriver();
     }
 
     /**
-     * Property 8: Task Creation Success
-     * For any valid task data, after successful creation, the task should appear in the task list 
-     * with all fields correctly populated and the task count should increase by one
-     * Validates: Requirements 5.1, 5.2, 5.3
+     * Propiedad 8: Éxito de Creación de Tareas
+     * Para cualquier dato válido de tarea, después de una creación exitosa, la tarea debe aparecer en la lista de tareas 
+     * con todos los campos correctamente poblados y el conteo de tareas debe aumentar en uno
+     * Valida: Requisitos 5.1, 5.2, 5.3
      * 
-     * This property-based test runs 30 iterations with randomly generated valid task data
+     * Esta prueba basada en propiedades ejecuta 30 iteraciones con datos de tarea válidos generados aleatoriamente
      */
     @Test
     public void testTaskCreationSuccessProperty() {
-        // Run property test with 1 iteration for debugging
+        // Ejecutar prueba de propiedad con 1 iteración para depuración
         for (int iteration = 0; iteration < 1; iteration++) {
             try {
-                // Generate random valid task data for this iteration
+                // Generar datos de tarea válidos aleatorios para esta iteración
                 TaskData taskData = generateValidTaskData();
                 
-                // Get initial task count
+                // Obtener conteo inicial de tareas
                 int initialCount = homePage.getTaskCount();
                 
-                // Open task creation modal
+                // Abrir modal de creación de tarea
                 homePage.clickNuevaTarea();
                 createTaskModal = new CreateTaskModal(driver);
                 
-                // Fill form with valid data
+                // Llenar formulario con datos válidos
                 createTaskModal.fillTitle(taskData.getTitle());
                 createTaskModal.fillDescription(taskData.getDescription());
                 createTaskModal.fillPriority(taskData.getPriority());
-                // CRITICAL: Fill the date field that we discovered was missing
+                // CRÍTICO: Llenar el campo de fecha que descubrimos que faltaba
                 createTaskModal.fillDateWithDefault();
                 
-                // Submit the form
+                // Enviar el formulario
                 createTaskModal.submit();
                 
-                // Test the property: valid task creation should succeed
-                assertTrue("Iteration " + iteration + ": Task creation should be successful for task: " + taskData.getTitle(), 
+                // Probar la propiedad: la creación de tarea válida debe tener éxito
+                assertTrue("Iteración " + iteration + ": La creación de tarea debe ser exitosa para la tarea: " + taskData.getTitle(), 
                            createTaskModal.isTaskCreationSuccessful());
                 
-                // Verify task appears in the list and count increased
-                assertTrue("Iteration " + iteration + ": Task should appear in list and count should increase for task: " + taskData.getTitle(), 
+                // Verificar que la tarea aparece en la lista y el conteo aumentó
+                assertTrue("Iteración " + iteration + ": La tarea debe aparecer en la lista y el conteo debe aumentar para la tarea: " + taskData.getTitle(), 
                            homePage.isTaskCreationSuccessful(initialCount, taskData.getTitle()));
                 
-                // Verify task count increased by exactly one
+                // Verificar que el conteo de tareas aumentó exactamente en uno
                 int currentCount = homePage.getTaskCount();
-                assertTrue("Iteration " + iteration + ": Task count should increase by one. Expected: " + (initialCount + 1) + ", Actual: " + currentCount, 
+                assertTrue("Iteración " + iteration + ": El conteo de tareas debe aumentar en uno. Esperado: " + (initialCount + 1) + ", Actual: " + currentCount, 
                            currentCount == initialCount + 1);
                 
             } catch (Exception e) {
-                // If there's an exception, fail the test with context
-                throw new AssertionError("Iteration " + iteration + " failed with exception: " + e.getMessage(), e);
+                // Si hay una excepción, fallar la prueba con contexto
+                throw new AssertionError("Iteración " + iteration + " falló con excepción: " + e.getMessage(), e);
             }
         }
     }
