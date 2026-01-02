@@ -45,8 +45,10 @@ El proyecto puede ser entregado como carpeta ZIP o repositorio Git.
 
 ---
 ## Estructura del proyecto
-La estructura del proyecto es un poco extensa, pero es más facil de entender a visualizarla.
 
+La estructura del proyecto es un poco extensa, pero es más fácil de entender al visualizarla.
+
+```plaintext
 src
 └── test
     ├── java
@@ -71,54 +73,60 @@ src
     │   │   └── CommonSteps.java
     │   ├── runners
     │   │   └── TestRunner.java
+    │   ├── tests
+    │   │   ├── DateSortingPropertyTest.java
+    │   │   ├── TitleSortingPropertyTest.java
+    │   │   ├── LoginValidationPropertyTest.java
+    │   │   ├── RegistrationValidationPropertyTest.java
+    │   │   ├── TaskCreationPropertyTest.java
+    │   │   └── DataUniquenessPropertyTest.java
     │   └── utils
-    │       └── DriverManager.java
+    │       ├── DriverManager.java
+    │       └── TestDataGenerator.java
     └── resources
-        ├── login.feature
-        ├── registrer.feature
-        ├── modifyuser.feature
-        ├── changepassword.feature
-        ├── create_task.feature
-        └── tasks_list.feature
+        └── features
+            ├── login.feature
+            ├── registrer.feature
+            ├── modifyuser.feature
+            ├── changepassword.feature
+            ├── create_task.feature
+            └── tasks_list.feature
+```
 
 ## Descripción de carpetas
 
-pages/
+**pages/**  
 Contiene las clases Page Object y Modales, encapsulando los localizadores y acciones de cada pantalla.
 
-steps/
+**steps/**  
 Implementación de los pasos definidos en los archivos Gherkin (@Given, @When, @Then).
 
-runners/
+**runners/**  
 Contiene el TestRunner encargado de ejecutar los escenarios de Cucumber.
 
-utils/
-Manejo centralizado del WebDriver.
+**tests/**  
+Contiene las pruebas basadas en propiedades (Property-Based Tests) para validación robusta de funcionalidades.
 
-resources/
+**utils/**  
+Manejo centralizado del WebDriver y generación de datos de prueba únicos.
+
+**resources/features/**  
 Archivos .feature escritos en lenguaje Gherkin, organizados por funcionalidad.
 
 ## Funcionalidades automatizadas
 
--- Registro de usuario
-
--- Inicio de sesión (escenario exitoso y erróneo)
-
--- Modificación de información de usuario (OK y erróneo)
-
--- Cambio de contraseña
-
---Visualización de lista de tareas con validación
-
---Creación de nueva tarea (OK y errónea)
-
---Ordenamiento de tareas por:
-
-        Título
-
-        Prioridad
-
-        Fecha de término
+- **Registro de usuario**
+- **Inicio de sesión** (escenario exitoso y erróneo)
+- **Modificación de información de usuario** (OK y erróneo)
+- **Cambio de contraseña**
+- **Visualización de lista de tareas** con validación
+- **Creación de nueva tarea** (OK y errónea)
+- **Ordenamiento de tareas por:**
+  - Título
+  - Prioridad
+  - Fecha de término
+- **Pruebas basadas en propiedades** para validación robusta
+- **Generación de datos únicos** para evitar conflictos entre pruebas
 
 ## Notas
 

@@ -52,4 +52,61 @@ public class ChangePasswordModal {
     public boolean isErrorVisible() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).isDisplayed();
     }
+
+    // ========== METODOS ADICIONALES PARA NUEVOS CASOS ==========
+
+    /**
+     * Valida error de campos requeridos
+     * Requerimientos: TC021
+     */
+    public boolean hasRequiredFieldsError() {
+        try {
+            By requiredError = By.xpath("//div[contains(text(), 'requerido') or contains(text(), 'obligatorio') or contains(text(), 'necesario') or contains(text(), 'vacío')]");
+            return !driver.findElements(requiredError).isEmpty() || isErrorVisible();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Valida si el modal aún está abierto
+     * Requerimientos: TC021, TC022
+     */
+    public boolean isModalStillOpen() {
+        try {
+            return !driver.findElements(saveButton).isEmpty() || 
+                   !driver.findElements(By.cssSelector("div[role='dialog'], .modal")).isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Cancela el cambio de contraseña
+     * Requerimientos: TC022
+     */
+    public void cancelChange() {
+        try {
+            // Buscar botón de cancelar
+            By cancelButton = By.xpath("//button[contains(., 'Cancelar') or contains(., 'Cancel') or contains(., 'Cerrar')]");
+            
+            if (!driver.findElements(cancelButton).isEmpty()) {
+                driver.findElement(cancelButton).click();
+            } else {
+                // Intentar cerrar modal con botón X o tecla ESC
+                By closeButton = By.xpath("//button[contains(@class, 'close') or contains(@aria-label, 'close')]");
+                if (!driver.findElements(closeButton).isEmpty()) {
+                    driver.findElement(closeButton).click();
+                } else {
+                    // Intentar tecla ESC
+                    By modalDialog = By.cssSelector("div[role='dialog']");
+                    if (!driver.findElements(modalDialog).isEmpty()) {
+                        driver.findElement(modalDialog).sendKeys(org.openqa.selenium.Keys.ESCAPE);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Advertencia: No se pudo cancelar el modal de cambio de contraseña: " + e.getMessage());
+        }
+    }
 }

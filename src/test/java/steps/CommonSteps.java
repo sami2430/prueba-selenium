@@ -12,12 +12,22 @@ public class CommonSteps {
         LoginPage loginPage = new LoginPage(DriverManager.getDriver());
         loginPage.open();
         loginPage.login("scastro@sentra.cl", "123");
+        
+        // CRITICAL FIX: Navigate to Home after login since app redirects to /dashboard (blank screen)
+        HomePage homePage = new HomePage(DriverManager.getDriver());
+        homePage.navigateToHome();
     }
 
     @Given("el usuario se encuentra en la pantalla Home")
     public void el_usuario_se_encuentra_en_la_pantalla_home() {
         HomePage homePage = new HomePage(DriverManager.getDriver());
-        // Verify we are on the home page - this step ensures we're in the right context for sorting
-        homePage.isTaskListNotEmpty();
+        // Ensure we are properly navigated to Home page for task operations
+        homePage.ensureOnHomePage();
+    }
+
+    @Given("el usuario se encuentra en la pantalla home")
+    public void el_usuario_se_encuentra_en_la_pantalla_home_lowercase() {
+        // Delegate to the existing implementation
+        el_usuario_se_encuentra_en_la_pantalla_home();
     }
 }

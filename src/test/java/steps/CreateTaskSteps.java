@@ -5,6 +5,8 @@ import io.cucumber.java.en.Then;
 import pages.HomePage;
 import pages.CreateTaskModal;
 import utils.DriverManager;
+import utils.TestDataGenerator;
+import utils.TestDataGenerator.TaskTestData;
 
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +20,9 @@ public class CreateTaskSteps {
     @When("el usuario abre el formulario de nueva tarea")
     public void abre_formulario_nueva_tarea() {
         homePage = new HomePage(DriverManager.getDriver());
+        // CRITICAL: Ensure we're on Home page before trying to create tasks
+        homePage.ensureOnHomePage();
+        
         // Store initial task count before creating new task
         initialTaskCount = homePage.getTaskCount();
         homePage.clickNuevaTarea();
@@ -26,10 +31,15 @@ public class CreateTaskSteps {
 
     @When("ingresa datos validos de la tarea")
     public void ingresa_datos_validos() {
-        createdTaskTitle = "Tarea QA";
-        createTaskModal.fillTitle(createdTaskTitle);
-        createTaskModal.fillDescription("Descripcion automatizada");
-        createTaskModal.fillPriority(2);
+        // Generate unique task data for each test run
+        TaskTestData taskData = TestDataGenerator.generateTaskTestData();
+        
+        createdTaskTitle = taskData.getTitle();
+        createTaskModal.fillTitle(taskData.getTitle());
+        createTaskModal.fillDescription(taskData.getDescription());
+        createTaskModal.fillPriority(taskData.getPriority());
+        // CRITICAL: Fill the date field that we discovered was missing
+        createTaskModal.fillDateWithDefault();
     }
 
     @When("guarda la nueva tarea")
@@ -43,19 +53,26 @@ public class CreateTaskSteps {
      */
     @When("el usuario crea una nueva tarea con datos validos")
     public void el_usuario_crea_una_nueva_tarea_con_datos_validos() {
-        // Step 1: Store initial task count
+        // Step 0: CRITICAL - Ensure we're on Home page (not dashboard)
         homePage = new HomePage(DriverManager.getDriver());
+        homePage.ensureOnHomePage();
+        
+        // Step 1: Store initial task count
         initialTaskCount = homePage.getTaskCount();
         
         // Step 2: Open the task creation modal
         homePage.clickNuevaTarea();
         createTaskModal = new CreateTaskModal(DriverManager.getDriver());
         
-        // Step 3: Fill the form with valid data
-        createdTaskTitle = "Tarea Automatizada " + System.currentTimeMillis();
-        createTaskModal.fillTitle(createdTaskTitle);
-        createTaskModal.fillDescription("Descripción de tarea creada automáticamente para pruebas");
-        createTaskModal.fillPriority(2);
+        // Step 3: Generate and fill the form with unique data
+        TaskTestData taskData = TestDataGenerator.generateTaskTestData();
+        createdTaskTitle = taskData.getTitle();
+        
+        createTaskModal.fillTitle(taskData.getTitle());
+        createTaskModal.fillDescription(taskData.getDescription());
+        createTaskModal.fillPriority(taskData.getPriority());
+        // CRITICAL: Fill the date field that we discovered was missing
+        createTaskModal.fillDateWithDefault();
         
         // Step 4: Submit the form
         createTaskModal.submit();
@@ -103,8 +120,14 @@ public class CreateTaskSteps {
 
     @When("intenta crear una tarea sin titulo")
     public void crear_tarea_sin_titulo() {
-        createTaskModal.fillDescription("Sin titulo");
-        createTaskModal.fillPriority(1);
+        // Generate realistic description but leave title empty
+        TaskTestData taskData = TestDataGenerator.generateTaskTestData();
+        
+        createTaskModal.fillTitle(""); // Empty title for negative test
+        createTaskModal.fillDescription(taskData.getDescription());
+        createTaskModal.fillPriority(taskData.getPriority());
+        // Still fill the date field for negative test
+        createTaskModal.fillDateWithDefault();
         createTaskModal.submit();
     }
 
@@ -122,5 +145,15 @@ public class CreateTaskSteps {
         int currentCount = homePage.getTaskCount();
         assertTrue("Task count should not increase when creation fails. Expected: " + initialTaskCount + ", Actual: " + currentCount, 
                    currentCount == initialTaskCount);
+    }
+
+    /**
+     * Alternative step for task creation failure validation
+     * Requirements: 5.4 (error handling)
+     */
+    @Then("la tarea no es creada")
+    public void la_tarea_no_es_creada() {
+        // Delegate to the existing implementation
+        valida_tarea_no_creada();
     }
 }

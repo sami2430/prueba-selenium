@@ -24,7 +24,7 @@ public class TestRunner {
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "steps",
-        tags = "@password",
+        tags = "@createTask",
         plugin = {"pretty"}
 )
 
